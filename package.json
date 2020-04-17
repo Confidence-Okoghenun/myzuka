@@ -1,0 +1,16 @@
+{
+  "name": "myzuka",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Confidence-Okoghenun/myzuka.git",
+  "author": "Confidence Okoghenun <confidenceboi@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "node-fetch": "^2.6.0"
+  },
+  "scripts": {
+      "start": "node index.js"
+  }
+
+}
