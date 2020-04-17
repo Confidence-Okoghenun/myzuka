@@ -2,29 +2,89 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-const url = [];
-const cat = 'A';
+let start = 1;
+const end = 1;
+// const endIndex = 397;
 
 async function asyncForEach(array, callback) {
-    for (let index = 1; index <= 397; index++) {
-        await callback(index);
-    }
+  function myLoop() {
+    setTimeout(async () => {
+      await callback(start);
+      start++;
+      if (start <= end) {
+        myLoop();
+      }
+    }, 1000);
+  }
+  myLoop();
 }
 
 (async () => {
-    await asyncForEach([], async num => {
-        const page = await fetch(`https://myzuka.club/Letter/${cat}/Page${num}`)
-            .then(res => res.text())
-            .then(body => body);
+  await asyncForEach([], async num => {
+    try {
+      const page = await fetch(`https://myzuka.club/Albums/Page38470`)
+        .then(res => res.text())
+        .then(body => body);
 
-        const $ = cheerio.load(page)
-        $('table td a').each(function (i, elem) {
-            url.push('https://myzuka.club' + $(elem).attr('href'));
+      //   console.log(page);
+      const $ = cheerio.load(page);
+      $('.album-list .item').each(function(i, elem) {
+        let albumYear;
+        const albumGenre = [];
+        const albumArt = $(elem)
+          .find('img')
+          .attr('src');
+        const albumName = $(elem)
+          .find('.title a')
+          .text()
+          .trim();
+        const albumArtist = $(elem)
+          .find('.author')
+          .text()
+          .trim();
+        const albumUrl = $(elem)
+          .find('.title a')
+          .attr('href');
+        const albumArtistUrl = $(elem)
+          .find('.author a')
+          .attr('href');
+
+        $(elem)
+          .find('.tags a')
+          .each(function(i, a) {
+            const href = $(a).attr('href');
+            if (href.includes('Genre')) {
+              albumGenre.push(
+                $(a)
+                  .text()
+                  .trim()
+              );
+            } else {
+              albumYear = $(a)
+                .text()
+                .trim();
+            }
+          });
+
+        const obj = {
+          albumArt,
+          albumUrl,
+          albumName,
+          albumYear,
+          albumGenre,
+          albumArtist,
+          albumArtistUrl
+        };
+
+        // console.log(obj)
+
+        fs.appendFile(`./data/albums.json`, `,${JSON.stringify(obj)}`, err => {
+          console.log(`saved ${i}`);
         });
-        console.log(num);
-    });
-    fs.writeFile(`./urls/${cat}.json`, JSON.stringify(url), function (err) {
-        if (err) throw err;
-        console.log(`Saved Cat ${cat}`);
-    });
+      });
+      console.log(`processing page ${num}`);
+    } catch (err) {
+      console.log('Could not fetch');
+    }
+  });
 })();
