@@ -2,9 +2,8 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-let start = 1;
-const end = 1;
-// const endIndex = 397;
+let start = 15;
+const end = 38471;
 
 async function asyncForEach(array, callback) {
   function myLoop() {
@@ -14,7 +13,7 @@ async function asyncForEach(array, callback) {
       if (start <= end) {
         myLoop();
       }
-    }, 1000);
+    }, 5000);
   }
   myLoop();
 }
@@ -22,69 +21,82 @@ async function asyncForEach(array, callback) {
 (async () => {
   await asyncForEach([], async num => {
     try {
-      const page = await fetch(`https://myzuka.club/Albums/Page38470`)
+      const page = await fetch(`https://myzuka.club/Albums/Page${num}`)
         .then(res => res.text())
         .then(body => body);
 
       //   console.log(page);
       const $ = cheerio.load(page);
-      $('.album-list .item').each(function(i, elem) {
-        let albumYear;
-        const albumGenre = [];
-        const albumArt = $(elem)
-          .find('img')
-          .attr('src');
-        const albumName = $(elem)
-          .find('.title a')
-          .text()
-          .trim();
-        const albumArtist = $(elem)
-          .find('.author')
-          .text()
-          .trim();
-        const albumUrl = $(elem)
-          .find('.title a')
-          .attr('href');
-        const albumArtistUrl = $(elem)
-          .find('.author a')
-          .attr('href');
+      if ($('body').find('.album-list .item').length) {
+        $('.album-list .item').each(function(i, elem) {
+          let albumYear;
+          const albumGenre = [];
+          const albumArt = $(elem)
+            .find('img')
+            .attr('src');
+          const albumName = $(elem)
+            .find('.title a')
+            .text()
+            .trim();
+          const albumArtist = $(elem)
+            .find('.author')
+            .text()
+            .trim();
+          const albumUrl =
+            'https://myzuka.club' +
+            $(elem)
+              .find('.title a')
+              .attr('href');
+          const albumArtistUrl =
+            'https://myzuka.club' +
+            $(elem)
+              .find('.author a')
+              .attr('href');
 
-        $(elem)
-          .find('.tags a')
-          .each(function(i, a) {
-            const href = $(a).attr('href');
-            if (href.includes('Genre')) {
-              albumGenre.push(
-                $(a)
+          $(elem)
+            .find('.tags a')
+            .each(function(i, a) {
+              const href = $(a).attr('href');
+              if (href.includes('Genre')) {
+                albumGenre.push(
+                  $(a)
+                    .text()
+                    .trim()
+                );
+              } else {
+                albumYear = $(a)
                   .text()
-                  .trim()
-              );
-            } else {
-              albumYear = $(a)
-                .text()
-                .trim();
+                  .trim();
+              }
+            });
+
+          const obj = {
+            albumArt,
+            albumUrl,
+            albumName,
+            albumYear,
+            albumGenre,
+            albumArtist,
+            albumArtistUrl
+          };
+
+          // console.log(obj)
+
+          fs.appendFile(
+            `./data/albums.json`,
+            `,${JSON.stringify(obj)}`,
+            err => {
+              console.log(`saved ${i}`);
             }
-          });
-
-        const obj = {
-          albumArt,
-          albumUrl,
-          albumName,
-          albumYear,
-          albumGenre,
-          albumArtist,
-          albumArtistUrl
-        };
-
-        // console.log(obj)
-
-        fs.appendFile(`./data/albums.json`, `,${JSON.stringify(obj)}`, err => {
-          console.log(`saved ${i}`);
+          );
         });
-      });
-      console.log(`processing page ${num}`);
+        console.log(`processing page ${num}`);
+      } else {
+        console.log('invalid page, exiting');
+        process.exit();
+      }
     } catch (err) {
-      console.log('Could not fetch');
+      console.log('could not fetch');
     }
   });
 })();
