@@ -2,7 +2,7 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-let start = 15;
+let start = 406;
 const end = 38471;
 
 async function asyncForEach(array, callback) {
@@ -13,7 +13,7 @@ async function asyncForEach(array, callback) {
       if (start <= end) {
         myLoop();
       }
-    }, 5000);
+    }, 1000);
   }
   myLoop();
 }
@@ -41,7 +41,8 @@ async function asyncForEach(array, callback) {
           const albumArtist = $(elem)
             .find('.author')
             .text()
-            .trim();
+            .trim()
+            .replace('                     / \n', ' ');
           const albumUrl =
             'https://myzuka.club' +
             $(elem)
