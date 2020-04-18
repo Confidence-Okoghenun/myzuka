@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 1008;
-let start = 1930;
+let start = 1934;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -22,7 +22,6 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  console.log(typeof num);
   if (Number.isInteger(num / 500)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
@@ -134,7 +133,7 @@ const scrape = async () => {
           }, Promise.resolve())
           .then(() => {
             console.log(`saved page ${num}`);
-            gitPush();
+            gitPush(num);
           });
       } else {
         start = end + 10;
