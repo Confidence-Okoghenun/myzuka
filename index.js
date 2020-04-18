@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 1008;
-let start = 1720;
+let start = 1930;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -22,7 +22,8 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  if (Number.isInteger(num / 1)) {
+  console.log(typeof num);
+  if (Number.isInteger(num / 500)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
     console.log(`commiting ${num} to git`);
@@ -51,6 +52,7 @@ const scrape = async () => {
         .then(res => res.text())
         .then(body => body);
 
+      console.log(`processing page ${num}`);
       //   console.log(page);
       const $ = cheerio.load(page);
       if ($('body').find('.album-list .item').length) {
@@ -112,23 +114,28 @@ const scrape = async () => {
             return obj;
           })
           .get()
-          .forEach((obj, i) => {
-            fs.appendFile(
-              `./data/albums${
-                String(num)
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  .split(',')[0]
-              }b.json`,
-              `,${JSON.stringify(obj)}`,
-              err => {
-                console.log(`saved ${i}`);
-                if (i === 23) {
-                  gitPush();
-                }
-              }
+          .reduce((promiseChain, obj) => {
+            return promiseChain.then(
+              () =>
+                new Promise(resolve => {
+                  fs.appendFile(
+                    `./data/albums${
+                      String(num)
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        .split(',')[0]
+                    }b.json`,
+                    `,${JSON.stringify(obj)}`,
+                    err => {
+                      resolve();
+                    }
+                  );
+                })
             );
+          }, Promise.resolve())
+          .then(() => {
+            console.log(`saved page ${num}`);
+            gitPush();
           });
-        console.log(`processing page ${num}`);
       } else {
         start = end + 10;
         clearTimeout(loopTimeOutId);
