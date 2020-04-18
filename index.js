@@ -2,7 +2,8 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-let start = 894;
+// let start = 1008;
+let start = 1000;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -14,7 +15,7 @@ const asyncForEach = async (array, callback) => {
       if (start <= end) {
         myLoop();
       }
-    }, 1000);
+    }, 15000);
   };
   myLoop();
 };
@@ -85,7 +86,11 @@ const scrape = async () => {
           // console.log(obj)
 
           fs.appendFile(
-            `./data/albums.json`,
+            `./data/albums${
+              String(num)
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                .split(',')[0]
+            }.json`,
             `,${JSON.stringify(obj)}`,
             err => {
               console.log(`saved ${i}`);
