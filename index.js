@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 1008;
-let start = 1608;
+let start = 1720;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -21,6 +21,29 @@ const asyncForEach = async (array, callback) => {
   myLoop();
 };
 
+const gitPush = num => {
+  if (Number.isInteger(num / 1)) {
+    start = end + 10;
+    clearTimeout(loopTimeOutId);
+    console.log(`commiting ${num} to git`);
+
+    git.add(['.'], () => {
+      git.commit(`chore: Stopped at ${num}`, () => {
+        git.push('origin', 'master', () => {
+          console.log(`push ${num} to origin master`);
+        });
+      });
+    });
+
+    setTimeout(() => {
+      start = num + 1;
+      scrape();
+    }, 60000);
+  } else {
+    return;
+  }
+};
+
 const scrape = async () => {
   await asyncForEach([], async num => {
     try {
@@ -31,72 +54,80 @@ const scrape = async () => {
       //   console.log(page);
       const $ = cheerio.load(page);
       if ($('body').find('.album-list .item').length) {
-        $('.album-list .item').each((i, elem) => {
-          let albumYear;
-          const albumGenre = [];
-          const albumArtist = [];
-          const albumArt = $(elem)
-            .find('img')
-            .attr('src');
-          const albumName = $(elem)
-            .find('.title a')
-            .text()
-            .trim();
-          const albumUrl =
-            'https://myzuka.club' +
-            $(elem)
+        $('.album-list .item')
+          .map((i, elem) => {
+            let albumYear;
+            const albumGenre = [];
+            const albumArtist = [];
+            const albumArt = $(elem)
+              .find('img')
+              .attr('src');
+            const albumName = $(elem)
               .find('.title a')
-              .attr('href');
+              .text()
+              .trim();
+            const albumUrl =
+              'https://myzuka.club' +
+              $(elem)
+                .find('.title a')
+                .attr('href');
 
-          $(elem)
-            .find('.author a')
-            .each((i, a) => {
-              albumArtist.push({
-                name: $(a)
-                  .text()
-                  .trim(),
-                url: 'https://myzuka.club' + $(a).attr('href')
-              });
-            });
-
-          $(elem)
-            .find('.tags a')
-            .each((i, a) => {
-              const href = $(a).attr('href');
-              if (href.includes('Genre')) {
-                albumGenre.push(
-                  $(a)
+            $(elem)
+              .find('.author a')
+              .each((i, a) => {
+                albumArtist.push({
+                  name: $(a)
                     .text()
-                    .trim()
-                );
-              } else {
-                albumYear = $(a)
-                  .text()
-                  .trim();
+                    .trim(),
+                  url: 'https://myzuka.club' + $(a).attr('href')
+                });
+              });
+
+            $(elem)
+              .find('.tags a')
+              .each((i, a) => {
+                const href = $(a).attr('href');
+                if (href.includes('Genre')) {
+                  albumGenre.push(
+                    $(a)
+                      .text()
+                      .trim()
+                  );
+                } else {
+                  albumYear = $(a)
+                    .text()
+                    .trim();
+                }
+              });
+
+            const obj = {
+              albumArt,
+              albumUrl,
+              albumName,
+              albumYear,
+              albumGenre,
+              albumArtist
+            };
+
+            return obj;
+          })
+          .get()
+          .forEach((obj, i) => {
+            fs.appendFile(
+              `./data/albums${
+                String(num)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  .split(',')[0]
+              }b.json`,
+              `,${JSON.stringify(obj)}`,
+              err => {
+                console.log(`saved ${i}`);
+                if (i === 23) {
+                  gitPush();
+                }
               }
-            });
-
-          const obj = {
-            albumArt,
-            albumUrl,
-            albumName,
-            albumYear,
-            albumGenre,
-            albumArtist
-          };
-
-          fs.appendFile(
-            `./data/albums${
-              String(num)
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                .split(',')[0]
-            }b.json`,
-            `,${JSON.stringify(obj)}`,
-            err => {
-              console.log(`saved ${i}`);
-            }
-          );
-        });
+            );
+          });
         console.log(`processing page ${num}`);
       } else {
         start = end + 10;
@@ -106,24 +137,6 @@ const scrape = async () => {
           start = num;
           scrape();
         }, 120000);
-      }
-      if (Number.isInteger(num / 1)) {
-        start = end + 10;
-        clearTimeout(loopTimeOutId);
-        console.log(`commiting ${num} to git`);
-
-        git.add(['.'], () => {
-          git.commit(`chore: Stopped at ${num}`, () => {
-            git.push('origin', 'master', () => {
-              console.log(`push ${num} to origin master`);
-            });
-          });
-        });
-
-        setTimeout(() => {
-          start = num;
-          scrape();
-        }, 60000);
       }
     } catch (err) {
       console.log('could not fetch');
