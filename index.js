@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
 // let start = 1008;
-let start = 1000;
+let start = 1400;
 const end = 38471;
 let loopTimeOutId = 0;
 
