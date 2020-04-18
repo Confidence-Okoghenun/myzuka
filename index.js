@@ -2,23 +2,24 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 
-let start = 406;
+let start = 894;
 const end = 38471;
+let loopTimeOutId = 0;
 
-async function asyncForEach(array, callback) {
-  function myLoop() {
-    setTimeout(async () => {
+const asyncForEach = async (array, callback) => {
+  const myLoop = () => {
+    loopTimeOutId = setTimeout(async () => {
       await callback(start);
       start++;
       if (start <= end) {
         myLoop();
       }
     }, 1000);
-  }
+  };
   myLoop();
-}
+};
 
-(async () => {
+const scrape = async () => {
   await asyncForEach([], async num => {
     try {
       const page = await fetch(`https://myzuka.club/Albums/Page${num}`)
@@ -28,7 +29,7 @@ async function asyncForEach(array, callback) {
       //   console.log(page);
       const $ = cheerio.load(page);
       if ($('body').find('.album-list .item').length) {
-        $('.album-list .item').each(function(i, elem) {
+        $('.album-list .item').each((i, elem) => {
           let albumYear;
           const albumGenre = [];
           const albumArt = $(elem)
@@ -56,7 +57,7 @@ async function asyncForEach(array, callback) {
 
           $(elem)
             .find('.tags a')
-            .each(function(i, a) {
+            .each((i, a) => {
               const href = $(a).attr('href');
               if (href.includes('Genre')) {
                 albumGenre.push(
@@ -93,11 +94,20 @@ async function asyncForEach(array, callback) {
         });
         console.log(`processing page ${num}`);
       } else {
-        console.log('invalid page, exiting');
-        process.exit();
+        start = end + 10;
+        clearTimeout(loopTimeOutId);
+        console.log(`error in page ${num}, sleeping`);
+        setTimeout(() => {
+          start = num;
+          scrape();
+        }, 120000);
+        // console.log('invalid page, exiting');
+        // process.exit();
       }
     } catch (err) {
       console.log('could not fetch');
     }
   });
-})();
+};
+
+scrape();
