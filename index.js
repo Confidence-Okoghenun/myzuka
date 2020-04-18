@@ -1,9 +1,10 @@
 const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
+const git = require('simple-git')();
 
 // let start = 1008;
-let start = 1549;
+let start = 1608;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -105,8 +106,24 @@ const scrape = async () => {
           start = num;
           scrape();
         }, 120000);
-        // console.log('invalid page, exiting');
-        // process.exit();
+      }
+      if (Number.isInteger(num / 1)) {
+        start = end + 10;
+        clearTimeout(loopTimeOutId);
+        console.log(`commiting ${num} to git`);
+
+        git.add(['.'], () => {
+          git.commit(`chore: Stopped at ${num}`, () => {
+            git.push('origin', 'master', () => {
+              console.log(`push ${num} to origin master`);
+            });
+          });
+        });
+
+        setTimeout(() => {
+          start = num;
+          scrape();
+        }, 60000);
       }
     } catch (err) {
       console.log('could not fetch');
