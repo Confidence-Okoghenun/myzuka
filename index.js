@@ -33,6 +33,7 @@ const scrape = async () => {
         $('.album-list .item').each((i, elem) => {
           let albumYear;
           const albumGenre = [];
+          const albumArtist = [];
           const albumArt = $(elem)
             .find('img')
             .attr('src');
@@ -40,21 +41,22 @@ const scrape = async () => {
             .find('.title a')
             .text()
             .trim();
-          const albumArtist = $(elem)
-            .find('.author')
-            .text()
-            .trim()
-            .replace('                     / \n', ' ');
           const albumUrl =
             'https://myzuka.club' +
             $(elem)
               .find('.title a')
               .attr('href');
-          const albumArtistUrl =
-            'https://myzuka.club' +
-            $(elem)
-              .find('.author a')
-              .attr('href');
+
+          $(elem)
+            .find('.author a')
+            .each((i, a) => {
+              albumArtist.push({
+                name: $(a)
+                  .text()
+                  .trim(),
+                url: 'https://myzuka.club' + $(a).attr('href')
+              });
+            });
 
           $(elem)
             .find('.tags a')
@@ -79,11 +81,8 @@ const scrape = async () => {
             albumName,
             albumYear,
             albumGenre,
-            albumArtist,
-            albumArtistUrl
+            albumArtist
           };
-
-          // console.log(obj)
 
           fs.appendFile(
             `./data/albums${
@@ -116,3 +115,7 @@ const scrape = async () => {
 };
 
 scrape();
+
+// NOTES
+// There was a bug from 1 to 1399 concerning albums having multiple artist the affected files
+// are albums.json and albums1.json
