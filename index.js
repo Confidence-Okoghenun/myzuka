@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 2120;
-let start = 2536;
+let start = 2537;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -23,7 +23,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  if (Number.isInteger(num / 2)) {
+  if (Number.isInteger(num / 500)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
     console.log(`commiting ${num} to git`);
