@@ -26,7 +26,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  if (Number.isInteger(num / 500)) {
+  if (Number.isInteger(num / 2)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
     console.log(`commiting ${num} to git`);
