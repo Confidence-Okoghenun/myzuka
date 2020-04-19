@@ -3,8 +3,8 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
-// let start = 1008;
-let start = 1934;
+// let start = 2120;
+let start = 2366;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -122,7 +122,7 @@ const scrape = async () => {
                       String(num)
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                         .split(',')[0]
-                    }b.json`,
+                    }.json`,
                     `,${JSON.stringify(obj)}`,
                     err => {
                       resolve();
