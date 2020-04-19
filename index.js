@@ -1,11 +1,8 @@
 const fs = require('fs');
 require('dotenv').config();
 const cheerio = require('cheerio');
-const express = require('express');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
-
-const app = express();
 
 // let start = 2538;
 let start = 2898;
@@ -26,7 +23,7 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  if (Number.isInteger(num / 2)) {
+  if (Number.isInteger(num / 500)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
     console.log(`commiting ${num} to git`);
@@ -136,10 +133,8 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(() => {
-            fs.writeFile('./stop.txt', num, () => {
-              console.log(`saved page ${num}`);
-              gitPush(num);
-            });
+            console.log(`saved page ${num}`);
+            gitPush(num);
           });
       } else {
         start = end + 10;
@@ -156,16 +151,7 @@ const scrape = async () => {
   });
 };
 
-app.get('/', function(req, res) {
-  console.log('preventing dyno from sleeping');
-  res.send('Hello World');
-});
-
-app.listen(process.env.PORT, () => {
-  console.log('Starting process');
-  scrape();
-});
-
+scrape();
 // NOTES
 // There was a bug from 1 to 1399 concerning albums having multiple artist the affected files
 // are albums.json and albums1.json
