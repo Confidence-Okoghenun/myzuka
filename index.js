@@ -1,12 +1,14 @@
 const fs = require('fs');
 require('dotenv').config();
 const cheerio = require('cheerio');
-const express = require('express')
+const express = require('express');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
+const app = express();
+
 // let start = 2538;
-let start = 2854;
+let start = 2898;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -152,19 +154,15 @@ const scrape = async () => {
   });
 };
 
+app.get('/', function(req, res) {
+  console.log('preventing dyno from sleeping');
+  res.send('Hello World');
+});
 
-
-const app = express()
- 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
- 
 app.listen(process.env.PORT, () => {
-  console.log('Precess Started');
+  console.log('Starting process');
   scrape();
-})
-
+});
 
 // NOTES
 // There was a bug from 1 to 1399 concerning albums having multiple artist the affected files
