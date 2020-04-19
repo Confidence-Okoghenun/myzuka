@@ -22,16 +22,20 @@ const asyncForEach = async (array, callback) => {
 };
 
 const gitPush = num => {
-  if (Number.isInteger(num / 500)) {
+  if (Number.isInteger(num / 2)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
     console.log(`commiting ${num} to git`);
 
     git.add(['.'], () => {
       git.commit(`chore: Stopped at ${num}`, () => {
-        git.push('origin', 'master', () => {
-          console.log(`push ${num} to origin master`);
-        });
+        git.push(
+          'https://Confidence-Okoghenun:premier4league@github.com/Confidence-Okoghenun/myzuka',
+          'master',
+          () => {
+            console.log(`push ${num} to origin master`);
+          }
+        );
       });
     });
 
