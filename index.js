@@ -136,8 +136,10 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(() => {
-            console.log(`saved page ${num}`);
-            gitPush(num);
+            fs.writeFile('stop.txt', num, () => {
+              console.log(`saved page ${num}`);
+              gitPush(num);
+            });
           });
       } else {
         start = end + 10;
