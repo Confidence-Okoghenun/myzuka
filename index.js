@@ -136,7 +136,7 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(() => {
-            fs.writeFile('stop.txt', num, () => {
+            fs.writeFile('./stop.txt', num, () => {
               console.log(`saved page ${num}`);
               gitPush(num);
             });
