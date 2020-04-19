@@ -1,5 +1,4 @@
 const fs = require('fs');
-require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
@@ -30,7 +29,7 @@ const gitPush = num => {
 
     git.add(['.'], () => {
       git.commit(`chore: Stopped at ${num}`, () => {
-        git.push(process.env.gitRemote, 'master', () => {
+        git.push('origin', 'master', () => {
           console.log(`push ${num} to origin master`);
         });
       });
