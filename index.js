@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 2120;
-let start = 2366;
+let start = 2534;
 const end = 38471;
 let loopTimeOutId = 0;
 
