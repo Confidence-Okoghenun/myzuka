@@ -1,10 +1,11 @@
 const fs = require('fs');
+require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 // let start = 2120;
-let start = 2534;
+let start = 2536;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -29,13 +30,9 @@ const gitPush = num => {
 
     git.add(['.'], () => {
       git.commit(`chore: Stopped at ${num}`, () => {
-        git.push(
-          'https://Confidence-Okoghenun:premier4league@github.com/Confidence-Okoghenun/myzuka',
-          'master',
-          () => {
-            console.log(`push ${num} to origin master`);
-          }
-        );
+        git.push(process.env.gitRemote, 'master', () => {
+          console.log(`push ${num} to origin master`);
+        });
       });
     });
 
