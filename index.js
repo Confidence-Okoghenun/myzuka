@@ -18,7 +18,7 @@ const asyncForEach = async (array, callback) => {
         myLoop();
       }
     }, 15000);
-  };
+  }
   myLoop();
 };
 
