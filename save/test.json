@@ -1,0 +1,59 @@
+[
+  {
+    "albumArt": "http://cdn-40.myzcloud.pro/img/69/16912246/44793486.jpg",
+    "albumUrl": "https://myzuka.club/Album/1031788/Together-2018",
+    "albumName": "Together",
+    "albumYear": "2018",
+    "albumGenre": ["Jazz"],
+    "albumArtist": [
+      {
+        "name": "Randy Brecker",
+        "url": "https://myzuka.club/Artist/56227/Randy-Brecker"
+      },
+      {
+        "name": "UMO Jazz Orchestra & Mats Holmquist",
+        "url": "https://myzuka.club/Artist/645919/Umo-Jazz-Orchestra-And-Mats-Holmquist"
+      }
+    ]
+  },
+  {
+    "albumArt": "http://cdn-40.myzcloud.pro/img/69/16912225/44793479.jpg",
+    "albumUrl": "https://myzuka.club/Album/1031787/kris-wu-hold-me-down-2018",
+    "albumName": "Hold Me Down",
+    "albumYear": "2018",
+    "albumGenre": ["Rap", "Hip-Hop"],
+    "albumArtist": [
+      {
+        "name": "吳亦凡 (Kris Wu)",
+        "url": "https://myzuka.club/Artist/328245/kris-wu"
+      }
+    ]
+  },
+  {
+    "albumArt": "http://cdn-40.myzcloud.pro/img/69/16912193/44793463.jpg",
+    "albumUrl": "https://myzuka.club/Album/1031785/Sabrina-Claudio-No-Rain-No-Flowers-2018",
+    "albumName": "No Rain, No Flowers",
+    "albumYear": "2018",
+    "albumGenre": ["R'n'B", "Soul"],
+    "albumArtist": [
+      {
+        "name": "Sabrina Claudio",
+        "url": "https://myzuka.club/Artist/552046/Sabrina-Claudio"
+      }
+    ]
+  },
+  {
+    "albumArt": "http://cdn-40.myzcloud.pro/img/69/16912124/44793439.jpg",
+    "albumUrl": "https://myzuka.club/Album/1031784/Maks-Barskih-Polurazdeta-2018",
+    "albumName": "Полураздета",
+    "albumYear": "2018",
+    "albumGenre": ["Pop"],
+    "albumArtist": [
+      {
+        "name": "Макс Барских",
+        "url": "https://myzuka.club/Artist/80854/maks-barskih"
+      }
+    ]
+  }
+]
+

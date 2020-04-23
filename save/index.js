@@ -1,22 +1,21 @@
 const fs = require('fs');
-require('dotenv').config();
+//require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const controller = require('./controller');
-// require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../.env' });
 const Song = require('./model/internetSong');
 const Album = require('./model/internetAlbum');
 const Artist = require('./model/internetArtist');
 
-// 8944
 let index = 0;
 let loopTimeOutId = 0;
 
 const asyncForEach = async (albumsArr, callback) => {
   const myLoop = () => {
     loopTimeOutId = setTimeout(async () => {
-      await callback(albumsArr[index]);
+      await callback(albumsArr[index], index);
       index++;
       if (index <= albumsArr.length - 1) {
         myLoop();
@@ -27,7 +26,7 @@ const asyncForEach = async (albumsArr, callback) => {
 };
 
 const scrape = async albumsArr => {
-  await asyncForEach(albumsArr, async album => {
+  await asyncForEach(albumsArr, async (album, index) => {
     try {
       const artist = await Promise.all(
         album.albumArtist.map(async artist => {
@@ -123,14 +122,15 @@ const scrape = async albumsArr => {
 };
 
 const init = async () => {
-  console.log(process.env.dbURL)
   await mongoose.connect(process.env.dbURL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
 
-  fs.readFile('../data/albums2.json', (err, data) => {
+//  fs.readFile('test.json', (err, data) => {
+  fs.readFile('../data/albums1b.json', (err, data) => {
+    if(err) console.log(err);
     const albums = JSON.parse(data);
     scrape(albums);
   });
