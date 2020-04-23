@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
-let start = 9413;
+let start = 9717;
 const end = 38471;
 let loopTimeOutId = 0;
 
@@ -132,8 +132,11 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(() => {
-            console.log(`saved page ${num}`);
-            gitPush(num);
+            fs.writeFile('stop.txt', num, err => {
+              if (err) console.log(err);
+              console.log(`saved page ${num}`);
+              gitPush(num);
+            });
           });
       } else {
         start = end + 10;

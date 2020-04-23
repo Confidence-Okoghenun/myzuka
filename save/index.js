@@ -9,7 +9,7 @@ const Song = require('./model/internetSong');
 const Album = require('./model/internetAlbum');
 const Artist = require('./model/internetArtist');
 
-let index = 0;
+let index = 323;
 let loopTimeOutId = 0;
 
 const asyncForEach = async (albumsArr, callback) => {
@@ -104,7 +104,10 @@ const scrape = async albumsArr => {
             );
           }, Promise.resolve())
           .then(async () => {
-            console.log(`saved album ${index}`);
+            fs.writeFile('stop.txt', index, err => {
+              if (err) console.log(err);
+              console.log(`saved album ${index}`);
+            });
           });
       } else {
         start = 10000000000;
@@ -128,9 +131,9 @@ const init = async () => {
     useUnifiedTopology: true
   });
 
-//  fs.readFile('test.json', (err, data) => {
+  //  fs.readFile('test.json', (err, data) => {
   fs.readFile('../data/albums1b.json', (err, data) => {
-    if(err) console.log(err);
+    if (err) console.log(err);
     const albums = JSON.parse(data);
     scrape(albums);
   });
