@@ -4,8 +4,7 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
-// let start = 2538;
-let start = 8944;
+let start = 9413;
 const end = 38471;
 let loopTimeOutId = 0;
 

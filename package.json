@@ -8,10 +8,12 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
+    "mongoose": "^5.9.10",
     "node-fetch": "^2.6.0",
     "simple-git": "^1.132.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "save": "node ./save/index.js"
   }
 }
