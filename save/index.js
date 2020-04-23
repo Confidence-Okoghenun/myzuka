@@ -1,5 +1,4 @@
 const fs = require('fs');
-//require('dotenv').config();
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const mongoose = require('mongoose');
@@ -9,15 +8,15 @@ const Song = require('./model/internetSong');
 const Album = require('./model/internetAlbum');
 const Artist = require('./model/internetArtist');
 
-let index = 323;
+let start = 0;
 let loopTimeOutId = 0;
 
 const asyncForEach = async (albumsArr, callback) => {
   const myLoop = () => {
     loopTimeOutId = setTimeout(async () => {
-      await callback(albumsArr[index], index);
-      index++;
-      if (index <= albumsArr.length - 1) {
+      await callback(albumsArr[start], start);
+      start++;
+      if (start <= albumsArr.length - 1) {
         myLoop();
       }
     }, 15000);
@@ -131,7 +130,6 @@ const init = async () => {
     useUnifiedTopology: true
   });
 
-  //  fs.readFile('test.json', (err, data) => {
   fs.readFile('../data/albums1b.json', (err, data) => {
     if (err) console.log(err);
     const albums = JSON.parse(data);
