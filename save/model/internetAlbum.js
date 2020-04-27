@@ -31,6 +31,6 @@ const internetAlbumSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-// internetAlbumSchema.index({ user: 1, name: 1 });
+internetAlbumSchema.index({ artist: 1, name: 1}, { unique: true });
 
 module.exports = mongoose.model('internet_album', internetAlbumSchema);

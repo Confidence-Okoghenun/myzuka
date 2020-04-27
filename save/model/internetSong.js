@@ -24,4 +24,6 @@ const internetSongSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+internetSongSchema.index({ artist: 1, album: 1, name: 1 }, { unique: true });
+
 module.exports = mongoose.model('internet_song', internetSongSchema);
