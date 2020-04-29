@@ -11,6 +11,10 @@ const internetSongSchema = new mongoose.Schema({
     trim: true,
     type: String
   },
+  playId: {
+    trim: true,
+    type: String
+  },
   album: {
     ref: 'internet_album',
     type: mongoose.SchemaTypes.ObjectId
