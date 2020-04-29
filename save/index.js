@@ -20,7 +20,7 @@ const asyncForEach = async (albumsArr, callback) => {
       if (start <= albumsArr.length - 1) {
         myLoop();
       }
-    }, 150);
+    }, 15000);
   };
   myLoop();
 };
