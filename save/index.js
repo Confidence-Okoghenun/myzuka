@@ -139,7 +139,7 @@ const init = async () => {
     useUnifiedTopology: true
   });
 
-  fs.readFile('../data/albums1b.json', (err, data) => {
+  fs.readFile('../data/albums2.json', (err, data) => {
     if (err) console.log(err);
     const albums = JSON.parse(data);
     scrape(albums);
