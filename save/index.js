@@ -20,12 +20,15 @@ const asyncForEach = async (albumsArr, callback) => {
       if (start <= albumsArr.length - 1) {
         myLoop();
       }
-    }, 15000);
+    }, 150);
   };
   myLoop();
 };
 
-const scrape = async (albumsArr) => {
+const scrape = async () => {
+  const fileData = fs.readFileSync('../data/albums2.json');
+  const albumsArr = JSON.parse(fileData);
+
   await asyncForEach(albumsArr, async (album, index) => {
     try {
       const artist = await Promise.all(
@@ -65,8 +68,7 @@ const scrape = async (albumsArr) => {
       if ($('body').find('#bodyContent').length) {
         $('.player-inline')
           .map((i, elem) => {
-            // const url =
-            //   'https://myzuka.club' + $(elem).find('span.ico').attr('data-url');
+            const playId = $(elem).find('div.play').attr('id');
 
             const name = $(elem)
               .find('span.ico')
@@ -84,6 +86,7 @@ const scrape = async (albumsArr) => {
 
             const song = {
               name,
+              playId,
               duration
             };
 
@@ -132,17 +135,11 @@ const scrape = async (albumsArr) => {
   });
 };
 
-const init = async () => {
+(async () => {
   await mongoose.connect(process.env.dbURL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
-
-  fs.readFile('../data/albums2.json', (err, data) => {
-    if (err) console.log(err);
-    const albums = JSON.parse(data);
-    scrape(albums);
-  });
-};
-init();
+  scrape();
+})();
