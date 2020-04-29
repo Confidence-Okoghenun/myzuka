@@ -22,6 +22,11 @@ const internetAlbumSchema = new mongoose.Schema({
       lowercase: true
     }
   ],
+  url: {
+    trim: true,
+    type: String,
+    required: true
+  },
   artist: [
     {
       ref: 'internet_artist',
