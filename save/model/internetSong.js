@@ -7,11 +7,6 @@ const internetSongSchema = new mongoose.Schema({
     required: true,
     lowercase: true
   },
-  url: {
-    trim: true,
-    type: String,
-    required: true
-  },
   duration: {
     trim: true,
     type: String
@@ -20,10 +15,9 @@ const internetSongSchema = new mongoose.Schema({
     ref: 'internet_album',
     type: mongoose.SchemaTypes.ObjectId
   },
-  artist: [{ ref: 'internet_artist', type: mongoose.SchemaTypes.ObjectId }],
   createdAt: { type: Date, default: Date.now }
 });
 
-internetSongSchema.index({ artist: 1, album: 1, name: 1 }, { unique: true });
+internetSongSchema.index({ album: 1, name: 1 }, { unique: true });
 
 module.exports = mongoose.model('internet_song', internetSongSchema);
