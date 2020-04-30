@@ -131,7 +131,7 @@ const scrape = async () => {
         console.log(`error in album ${index}, sleeping`);
         setTimeout(() => {
           if (errCount === 3) {
-            console.log('too many errors, sleeping');
+            console.log('too many errors, skipping');
             start = index + 1;
           } else {
             start = index;
