@@ -1,4 +1,5 @@
 const fs = require('fs');
+const argv = require('yargs').argv;
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const mongoose = require('mongoose');
@@ -9,10 +10,11 @@ const Album = require('./model/internetAlbum');
 const Artist = require('./model/internetArtist');
 const Genre = require('./model/internetGenre');
 
-const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop ? stop + 1 : stop;
 let errCount = 0;
 let loopTimeOutId = 0;
+const albumNum = argv.albums;
+const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
+let start = stop ? stop + 1 : stop;
 
 const asyncForEach = async (albumsArr, callback) => {
   const myLoop = () => {
@@ -28,7 +30,7 @@ const asyncForEach = async (albumsArr, callback) => {
 };
 
 const scrape = async () => {
-  const fileData = fs.readFileSync('../data/albums2.json');
+  const fileData = fs.readFileSync(`../data/albums${albumNum}.json`);
   const albumsArr = JSON.parse(fileData);
 
   await asyncForEach(albumsArr, async (album, index) => {
@@ -145,6 +147,7 @@ const scrape = async () => {
 };
 
 (async () => {
+  console.log(`starting from index ${start} in album ${albumNum}`)
   await mongoose.connect(process.env.dbURL, {
     useCreateIndex: true,
     useNewUrlParser: true,
