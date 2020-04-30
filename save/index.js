@@ -9,7 +9,9 @@ const Album = require('./model/internetAlbum');
 const Artist = require('./model/internetArtist');
 const Genre = require('./model/internetGenre');
 
-let start = 0;
+const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
+let start = stop ? stop + 1 : stop;
+let errCount = 0;
 let loopTimeOutId = 0;
 
 const asyncForEach = async (albumsArr, callback) => {
@@ -66,6 +68,7 @@ const scrape = async () => {
       // console.log(page);
       const $ = cheerio.load(page);
       if ($('body').find('#bodyContent').length) {
+        errCount = 0;
         $('.player-inline')
           .map((i, elem) => {
             const playId = $(elem).find('div.play').attr('id');
@@ -125,9 +128,15 @@ const scrape = async () => {
         clearTimeout(loopTimeOutId);
         console.log(`error in album ${index}, sleeping`);
         setTimeout(() => {
-          start = index;
+          if (errCount === 3) {
+            console.log('too many errors, sleeping');
+            start = index + 1;
+          } else {
+            start = index;
+          }
           scrape();
         }, 120000);
+        errCount++;
       }
     } catch (err) {
       console.log('could not fetch');

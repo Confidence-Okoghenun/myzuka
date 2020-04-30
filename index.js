@@ -4,7 +4,8 @@ const cheerio = require('cheerio');
 const fetch = require('node-fetch');
 const git = require('simple-git')();
 
-let start = 31703;
+const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
+let start = stop ? stop + 1 : stop;
 const end = 38471;
 let loopTimeOutId = 0;
 
