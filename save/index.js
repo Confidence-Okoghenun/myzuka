@@ -28,7 +28,7 @@ const asyncForEach = async (albumsArr, callback) => {
 };
 
 const scrape = async () => {
-  const fileData = fs.readFileSync('../data/albums2.json');
+  const fileData = fs.readFileSync('../data/albums21.json');
   const albumsArr = JSON.parse(fileData);
 
   await asyncForEach(albumsArr, async (album, index) => {
