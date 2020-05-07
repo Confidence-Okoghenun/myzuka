@@ -5,8 +5,9 @@ const fetch = require('node-fetch');
 const git = require('simple-git')();
 
 const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop ? stop + 1 : stop;
-const end = 38471;
+let start = stop + 1;
+const end = 1999;
+//const end = 38471;
 let loopTimeOutId = 0;
 
 const asyncForEach = async (array, callback) => {
@@ -18,11 +19,11 @@ const asyncForEach = async (array, callback) => {
         myLoop();
       }
     }, 15000);
-  }
+  };
   myLoop();
 };
 
-const gitPush = num => {
+const gitPush = (num) => {
   if (Number.isInteger(num / 500)) {
     start = end + 10;
     clearTimeout(loopTimeOutId);
@@ -46,11 +47,11 @@ const gitPush = num => {
 };
 
 const scrape = async () => {
-  await asyncForEach([], async num => {
+  await asyncForEach([], async (num) => {
     try {
       const page = await fetch(`https://myzuka.club/Albums/Page${num}`)
-        .then(res => res.text())
-        .then(body => body);
+        .then((res) => res.text())
+        .then((body) => body);
 
       console.log(`processing page ${num}`);
       //   console.log(page);
@@ -61,26 +62,16 @@ const scrape = async () => {
             let albumYear;
             const albumGenre = [];
             const albumArtist = [];
-            const albumArt = $(elem)
-              .find('img')
-              .attr('src');
-            const albumName = $(elem)
-              .find('.title a')
-              .text()
-              .trim();
+            const albumArt = $(elem).find('img').attr('src');
+            const albumName = $(elem).find('.title a').text().trim();
             const albumUrl =
-              'https://myzuka.club' +
-              $(elem)
-                .find('.title a')
-                .attr('href');
+              'https://myzuka.club' + $(elem).find('.title a').attr('href');
 
             $(elem)
               .find('.author a')
               .each((i, a) => {
                 albumArtist.push({
-                  name: $(a)
-                    .text()
-                    .trim(),
+                  name: $(a).text().trim(),
                   url: 'https://myzuka.club' + $(a).attr('href')
                 });
               });
@@ -90,15 +81,9 @@ const scrape = async () => {
               .each((i, a) => {
                 const href = $(a).attr('href');
                 if (href.includes('Genre')) {
-                  albumGenre.push(
-                    $(a)
-                      .text()
-                      .trim()
-                  );
+                  albumGenre.push($(a).text().trim());
                 } else {
-                  albumYear = $(a)
-                    .text()
-                    .trim();
+                  albumYear = $(a).text().trim();
                 }
               });
 
@@ -117,15 +102,17 @@ const scrape = async () => {
           .reduce((promiseChain, obj) => {
             return promiseChain.then(
               () =>
-                new Promise(resolve => {
+                new Promise((resolve) => {
                   fs.appendFile(
                     `./data/albums${
-                      String(num)
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                        .split(',')[0]
+                      String(num).length < 4
+                        ? '0'
+                        : String(num)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            .split(',')[0]
                     }.json`,
                     `,${JSON.stringify(obj)}`,
-                    err => {
+                    (err) => {
                       resolve();
                     }
                   );
@@ -133,7 +120,7 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(() => {
-            fs.writeFile('stop.txt', num, err => {
+            fs.writeFile('stop.txt', num, (err) => {
               if (err) console.log(err);
               console.log(`saved page ${num}`);
               gitPush(num);
@@ -158,3 +145,4 @@ scrape();
 // NOTES
 // There was a bug from 1 to 1399 concerning albums having multiple artist the affected files
 // are albums.json and albums1.json
+
