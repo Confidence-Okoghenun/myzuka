@@ -130,9 +130,11 @@ const scrape = async () => {
         clearTimeout(loopTimeOutId);
         console.log(`error in album ${index}, sleeping`);
         setTimeout(() => {
-          if (errCount === 3) {
+          console.log(errCount)
+          if (errCount >= 3) {
             console.log('too many errors, skipping');
             start = index + 1;
+            errCount = 0;
           } else {
             start = index;
           }
@@ -155,3 +157,4 @@ const scrape = async () => {
   });
   scrape();
 })();
+
