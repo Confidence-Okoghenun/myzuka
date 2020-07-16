@@ -16,7 +16,7 @@ const Song = new mongoose.Schema({
     type: String
   },
   album: {
-    ref: 'internet_album',
+    ref: 'album',
     type: mongoose.SchemaTypes.ObjectId
   },
   createdAt: { type: Date, default: Date.now }
@@ -24,4 +24,4 @@ const Song = new mongoose.Schema({
 
 Song.index({ album: 1, name: 1 }, { unique: true });
 Song.index({ name: 'text' });
-module.exports = mongoose.model('internet_song', Song);
+module.exports = mongoose.model('song', Song);

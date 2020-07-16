@@ -12,4 +12,4 @@ const Genre = new mongoose.Schema({
 });
 
 Genre.index({ name: 'text' });
-module.exports = mongoose.model('internet_genre', Genre);
+module.exports = mongoose.model('genre', Genre);
