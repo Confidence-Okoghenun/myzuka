@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const internetAlbumSchema = new mongoose.Schema({
+const Album = new mongoose.Schema({
   cover: {
     trim: true,
     type: String
@@ -35,6 +35,6 @@ const internetAlbumSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-internetAlbumSchema.index({ artist: 1, name: 1 }, { unique: true });
+Album.index({ artist: 1, name: 1 }, { unique: true });
 
-module.exports = mongoose.model('internet_album', internetAlbumSchema);
+module.exports = mongoose.model('internet_album', Album);

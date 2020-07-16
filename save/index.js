@@ -5,10 +5,10 @@ const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const controller = require('./controller');
 require('dotenv').config({ path: '../.env' });
-const Song = require('./model/internetSong');
-const Album = require('./model/internetAlbum');
-const Artist = require('./model/internetArtist');
-const Genre = require('./model/internetGenre');
+const Song = require('./model/song');
+const Album = require('./model/album');
+const Artist = require('./model/artist');
+const Genre = require('./model/genre');
 
 let errCount = 0;
 let loopTimeOutId = 0;
@@ -130,7 +130,7 @@ const scrape = async () => {
         clearTimeout(loopTimeOutId);
         console.log(`error in album ${index}, sleeping`);
         setTimeout(() => {
-          console.log(errCount)
+          console.log(errCount);
           if (errCount >= 3) {
             console.log('too many errors, skipping');
             start = index + 1;
@@ -149,7 +149,7 @@ const scrape = async () => {
 };
 
 (async () => {
-  console.log(`starting from index ${start} in album ${albumNum}`)
+  console.log(`starting from index ${start} in album ${albumNum}`);
   await mongoose.connect(process.env.dbURL, {
     useCreateIndex: true,
     useNewUrlParser: true,
@@ -157,4 +157,3 @@ const scrape = async () => {
   });
   scrape();
 })();
-
