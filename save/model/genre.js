@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const internetGenreSchema = new mongoose.Schema({
+const Genre = new mongoose.Schema({
   name: {
     trim: true,
     unique: true,
@@ -11,4 +11,5 @@ const internetGenreSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('internet_genre', internetGenreSchema);
+Genre.index({ name: 'text' });
+module.exports = mongoose.model('internet_genre', Genre);

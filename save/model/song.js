@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const internetSongSchema = new mongoose.Schema({
+const Song = new mongoose.Schema({
   name: {
     trim: true,
     type: String,
@@ -22,6 +22,6 @@ const internetSongSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-internetSongSchema.index({ album: 1, name: 1 }, { unique: true });
-
-module.exports = mongoose.model('internet_song', internetSongSchema);
+Song.index({ album: 1, name: 1 }, { unique: true });
+Song.index({ name: 'text' });
+module.exports = mongoose.model('internet_song', Song);

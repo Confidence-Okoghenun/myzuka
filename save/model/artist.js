@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const internetArtistSchema = new mongoose.Schema({
+const Artist = new mongoose.Schema({
   name: {
     trim: true,
     unique: true,
@@ -11,4 +11,5 @@ const internetArtistSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('internet_artist', internetArtistSchema);
+Artist.index({ name: 'text' });
+module.exports = mongoose.model('internet_artist', Artist);
