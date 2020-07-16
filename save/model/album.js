@@ -22,13 +22,13 @@ const Album = new mongoose.Schema({
   },
   genre: [
     {
-      ref: 'internet_genre',
+      ref: 'genre',
       type: mongoose.SchemaTypes.ObjectId
     }
   ],
   artist: [
     {
-      ref: 'internet_artist',
+      ref: 'artist',
       type: mongoose.SchemaTypes.ObjectId
     }
   ],
@@ -36,5 +36,5 @@ const Album = new mongoose.Schema({
 });
 
 Album.index({ artist: 1, name: 1 }, { unique: true });
-
-module.exports = mongoose.model('internet_album', Album);
+Album.index({ name: 'text' });
+module.exports = mongoose.model('album', Album);

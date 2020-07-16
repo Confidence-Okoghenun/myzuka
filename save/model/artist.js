@@ -12,4 +12,4 @@ const Artist = new mongoose.Schema({
 });
 
 Artist.index({ name: 'text' });
-module.exports = mongoose.model('internet_artist', Artist);
+module.exports = mongoose.model('artist', Artist);
