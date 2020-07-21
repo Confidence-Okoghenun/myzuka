@@ -13,8 +13,9 @@ const Genre = require('./model/genre');
 let errCount = 0;
 let loopTimeOutId = 0;
 const albumNum = argv.albums;
-const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop ? stop + 1 : stop;
+//const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
+//let start = stop ? stop + 1 : stop;
+let start = 0;
 
 const asyncForEach = async (albumsArr, callback) => {
   const myLoop = () => {
