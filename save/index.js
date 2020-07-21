@@ -150,7 +150,7 @@ const scrape = async () => {
 
 (async () => {
   console.log(`starting from index ${start} in album ${albumNum}`);
-  await mongoose.connect(process.env.dbURL, {
+  await mongoose.connect('mongodb+srv://music:NOWABwkJlsCyo3YL@music-two.x8mjt.mongodb.net/music?retryWrites=true&w=majority', {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
