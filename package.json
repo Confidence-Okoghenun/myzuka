@@ -16,6 +16,6 @@
   "scripts": {
     "start": "node index.js",
     "save": "node ./save/index.js",
-    "build": "cd ./save && node index.js --albums=30 --start=0"
+    "build": "cd ./save && node index.js --albums=30 --start=1359"
   }
 }
