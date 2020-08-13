@@ -15,7 +15,7 @@ node index.js --albums=5
 stop.txt == 15724
 
 ```
-node index.js --albums=15
+node index.js --albums=17
 ```
 
 ## vm3
