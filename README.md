@@ -7,7 +7,7 @@ A scrape of http://myzuka.club/
 stop.txt == 12070
 
 ```
-node index.js --albums=5
+node index.js --albums=7
 ```
 
 ## vm2
