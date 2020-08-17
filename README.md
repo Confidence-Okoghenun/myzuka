@@ -1,4 +1,4 @@
-# myzuka
+# myzuka (VERY IMPORTANT! SKIPPED ALBUM 8 JSON!!!)
 
 A scrape of http://myzuka.club/
 
