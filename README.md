@@ -31,5 +31,5 @@ node index.js --albums=25
 stop.txt == 15937
 
 ```
-node index.js --albums=30
+node index.js --albums=32
 ```
