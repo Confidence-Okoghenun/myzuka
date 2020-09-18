@@ -29,7 +29,7 @@ const scrape = async () => {
 
       if ($('body').find('#bodyContent').length) {
         let cover = $('.main-details .side .vis').find('img').attr('src');
-        cover = cover.includes('://') ? cover :' https://myzuka.club' + cover;
+        cover = cover.includes('://') ? cover : 'https://myzuka.club' + cover;
 
         const artist = await Artist.findOneAndUpdate(
           { name },
