@@ -28,7 +28,8 @@ const scrape = async () => {
       const $ = cheerio.load(html);
 
       if ($('body').find('#bodyContent').length) {
-        const cover = $('.main-details .side .vis').find('img').attr('src');
+        let cover = $('.main-details .side .vis').find('img').attr('src');
+        cover = cover.includes('://') ? cover :' https://myzuka.club' + cover;
 
         const artist = await Artist.findOneAndUpdate(
           { name },
