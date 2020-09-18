@@ -1,31 +1,21 @@
 const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('node-fetch');
-const argv = require('yargs').argv;
+const part = require('yargs').argv.part;
 
-let errCount = 0;
-let loopTimeOutId = 0;
-const part = argv.part;
 const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop ? stop + 1 : stop;
+let start = stop === 0 ? stop : stop + 1;
 
-const asyncForEach = async (pageArr, callback) => {
-  const myLoop = () => {
-    loopTimeOutId = setTimeout(async () => {
-      await callback(pageArr[start], start);
-      start++;
-      if (start <= pageArr.length - 1) {
-        myLoop();
-      }
-    }, 15000);
-  };
-  myLoop();
+const asyncForEach = async (array, callback) => {
+  for (let index = start; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
 };
 
 const scrape = async () => {
   const pageArr = JSON.parse(fs.readFileSync(`page${part}.json`));
 
-  await asyncForEach(pageArr, async (page) => {
+  await asyncForEach(pageArr, async (page, index) => {
     try {
       const html = await fetch(`https://myzuka.club/Artist/Page${page}`)
         .then((res) => res.text())
@@ -65,25 +55,13 @@ const scrape = async () => {
             );
           }, Promise.resolve())
           .then(async () => {
-            fs.writeFileSync('stop.txt', page);
+            fs.writeFileSync('stop.txt', index);
             console.log(`processed page ${page}`);
           });
       } else {
-        start = 10000000000;
-        clearTimeout(loopTimeOutId);
-        console.log(`error in page ${page}, sleeping`);
-        setTimeout(() => {
-          console.log(errCount);
-          if (errCount >= 3) {
-            console.log('too many errors, skipping');
-            start = page + 1;
-            errCount = 0;
-          } else {
-            start = page;
-          }
-          scrape();
-        }, 120000);
-        errCount++;
+        console.log(`error in page ${page}`);
+        start = index + 1;
+        scrape();
       }
     } catch (error) {
       console.log({ error });
