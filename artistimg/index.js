@@ -31,7 +31,7 @@ const scrape = async () => {
         .then((res) => res.text())
         .then((body) => body);
 
-      console.log(`processing page ${page}`);
+      console.log(`starting page ${page}`);
       const $ = cheerio.load(html);
 
       if ($('body').find('#bodyContent').length) {
