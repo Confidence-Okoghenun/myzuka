@@ -14,12 +14,6 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-<<<<<<< HEAD
-    "start": "ls && node index.js",
-    "save": "node ./save/index.js",
-    "build": "cd ./save && node index.js --albums=5 --start=10722"
-=======
-    "build": "cd ./artistimg && node save.js --part= --start="
->>>>>>> master
+    "build": "cd ./artistimg && node save.js --part=1 --start=8027"
   }
 }
