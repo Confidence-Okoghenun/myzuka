@@ -42,8 +42,6 @@ const scrape = async () => {
         console.log(`processed index ${index} :: ${artist.name}`);
       } else {
         console.log(`error in index ${index}`);
-        start = index + 1;
-        scrape();
       }
     } catch (error) {
       console.log({ error });
