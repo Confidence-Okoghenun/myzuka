@@ -4,10 +4,8 @@ const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const part = require('yargs').argv.part;
 const Artist = require('../model/artist');
-require('dotenv').config({ path: '../.env' });
-
-const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop === 0 ? stop : stop + 1;
+let start = Number(require('yargs').argv.start);
+// require('dotenv').config({ path: '../.env' });
 
 const asyncForEach = async (array, callback) => {
   for (let index = start; index < array.length; index++) {
@@ -54,10 +52,13 @@ const scrape = async () => {
 };
 
 (async () => {
-  await mongoose.connect(process.env.dbURL, {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(
+    'mongodb://admin:admin4clouddb@34.67.189.163:27017/music?authSource=admin',
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
   scrape();
 })();
