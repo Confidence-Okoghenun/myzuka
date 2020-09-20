@@ -14,6 +14,6 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build": "cd ./artistimg && node save.js --part=2 --start=138472"
+    "build": "cd ./artistimg && node save.js --part=2 --start=224271"
   }
 }
