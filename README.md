@@ -4,32 +4,32 @@ A scrape of http://myzuka.club/
 
 ## vm 1
 
-stop.txt == 12070
+stop.txt == 0
 
 ```
-node index.js --albums=7
+node index.js --albums=36
 ```
 
 ## vm2
 
-stop.txt == 15724
+stop.txt == 0
 
 ```
-node index.js --albums=18
+node index.js --albums=35
 ```
 
 ## vm3
 
-stop.txt == 16490
+stop.txt == 0
 
 ```
-node index.js --albums=25
+node index.js --albums=34
 ```
 
 ## vm4
 
-stop.txt == 15937
+stop.txt == 0
 
 ```
-node index.js --albums=32
+node index.js --albums=33
 ```

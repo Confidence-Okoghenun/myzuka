@@ -50,13 +50,10 @@ const scrape = async () => {
 };
 
 (async () => {
-  await mongoose.connect(
-    'mongodb://admin:admin4clouddb@34.67.189.163:27017/music?authSource=admin',
-    {
-      useCreateIndex: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  );
+  await mongoose.connect(process.env.dbUrl, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   scrape();
 })();
