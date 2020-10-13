@@ -13,22 +13,19 @@ const asyncForEach = async (array, callback) => {
 };
 
 const scrape = async () => {
-  const partArr = JSON.parse(fs.readFileSync(`part${part}.json`));
   const albums = JSON.parse(fs.readFileSync(`album${part}.json`));
-
-  await asyncForEach(partArr, async (part, index) => {
+  await asyncForEach(albums, async (album, index) => {
     try {
       console.log(`starting index ${index}`);
-
-      const html = await fetch(albums[part].url)
+      const html = await fetch(album.url)
         .then((res) => res.text())
         .then((body) => body);
       const $ = cheerio.load(html);
 
       if ($('.main-details .side').find('img').length) {
         const cover = $('.main-details .side').find('img').attr('src');
-        const album = await Album.findByIdAndUpdate(
-          albums[part]._id['$oid'],
+        const nAlbum = await Album.findByIdAndUpdate(
+          album._id['$oid'],
           {
             cover,
           },
@@ -36,7 +33,7 @@ const scrape = async () => {
             new: true,
           }
         );
-        console.log(`completed index ${index} == ${album.cover}`);
+        console.log(`completed index ${index} == ${nAlbum.cover}`);
       } else {
         console.log(`error in index ${index}`);
       }
