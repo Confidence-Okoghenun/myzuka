@@ -1,8 +1,11 @@
-const fs = require('fs');
-const start = 588718;
-const stop = 784953;
 const part = 4;
+const fs = require('fs');
+const partFile = JSON.parse(fs.readFileSync(`part${part}.json`));
+const albumsFile = JSON.parse(fs.readFileSync('albums.json'));
 
-for (let i = start; i <= stop; i++) {
-  fs.appendFileSync(`part${part}.json`, `,${i}`);
-}
+fs.appendFileSync(`album${part}.json`, '[');
+partFile.forEach((i) => {
+  console.log(i);
+  fs.appendFileSync(`album${part}.json`, `,${JSON.stringify(albumsFile[i])}`);
+});
+fs.appendFileSync(`album${part}.json`, ']');
