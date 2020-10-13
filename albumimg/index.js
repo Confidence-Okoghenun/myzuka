@@ -14,7 +14,7 @@ const asyncForEach = async (array, callback) => {
 
 const scrape = async () => {
   const partArr = JSON.parse(fs.readFileSync(`part${part}.json`));
-  const albums = JSON.parse(fs.readFileSync('albums.json'));
+  const albums = JSON.parse(fs.readFileSync(`album${part}.json`));
 
   await asyncForEach(partArr, async (part, index) => {
     try {
@@ -53,7 +53,7 @@ const scrape = async () => {
     {
       useCreateIndex: true,
       useNewUrlParser: true,
-      useFindAndModify: true,
+      useFindAndModify: false,
       useUnifiedTopology: true,
     }
   );
