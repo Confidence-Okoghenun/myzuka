@@ -45,8 +45,7 @@ const scrape = async () => {
 
 (async () => {
   console.log(`starting from index ${start} in part ${part}`);
-  await mongoose.connect(
-    'mongodb://admin:admin4clouddb@34.67.189.163:27017/music?authSource=admin',
+  await mongoose.connect(process.env.dbURL,
     {
       useCreateIndex: true,
       useNewUrlParser: true,
