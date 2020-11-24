@@ -13,8 +13,9 @@ const Genre = require('./model/genre');
 let errCount = 0;
 let loopTimeOutId = 0;
 const albumNum = argv.albums;
-const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
-let start = stop ? stop + 1 : stop;
+let start = argv.start;
+//const stop = Number(JSON.parse(`"${fs.readFileSync('./stop.txt')}"`));
+//let start = stop ? stop + 1 : stop;
 
 const asyncForEach = async (albumsArr, callback) => {
   const myLoop = () => {
@@ -150,10 +151,13 @@ const scrape = async () => {
 
 (async () => {
   console.log(`starting from index ${start} in album ${albumNum}`);
-  await mongoose.connect(process.env.dbURL, {
-    useCreateIndex: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  await mongoose.connect(
+    'mongodb+srv://music:NOWABwkJlsCyo3YL@music-two.x8mjt.mongodb.net/music?retryWrites=true&w=majority',
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    }
+  );
   scrape();
 })();
