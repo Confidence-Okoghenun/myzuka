@@ -1,11 +1,14 @@
 const fs = require('fs');
-const cheerio = require('cheerio');
-const fetch = require('node-fetch');
 const mongoose = require('mongoose');
 const download = require('download');
 const part = require('yargs').argv.part;
 const Album = require('../model/album');
 const start = Number(require('yargs').argv.start);
+const { Storage } = require('@google-cloud/storage');
+
+const bucketName = 'cdn.osdbapi.com';
+const storage = new Storage({ keyFilename: 'key.json' });
+const baseImageURL = 'https://cdn.osdbapi.com/images/album';
 
 const asyncForEach = async (array, callback) => {
   for (let index = start; index < array.length; index++) {
@@ -21,8 +24,27 @@ const scrape = async () => {
         cover,
         _id: { $oid: id },
       } = album;
-      await download(cover, './downloads', { filename: id + '.jpg' });
-      console.log({ cover, id });
+      const update = { cover: null };
+      if (!cover || cover.includes('default')) {
+        update.cover = `${baseImageURL}/default.jpg`;
+      } else {
+        const filename = `${id}.jpg`;
+        const filePath = `./downloads/${id}.jpg`;
+        const destination = `images/album/${filename}`;
+
+        await download(cover, './downloads', { filename });
+        await storage.bucket(bucketName).upload(filePath, {
+          destination,
+          metadata: {
+            cacheControl: 'public, max-age=31536000',
+          },
+        });
+        fs.unlinkSync(filePath);
+
+        update.cover = `${baseImageURL}/${filename}`;
+      }
+      await Album.findByIdAndUpdate(id, update);
+      console.log('processed index: ', index);
     } catch (error) {
       console.log({ error });
     }
@@ -31,8 +53,8 @@ const scrape = async () => {
 
 (async () => {
   console.log(`starting from index ${start} in part ${part}`);
-  // await mongoose.connect(process.env.dbURL,
-  await mongoose.connect('mongodb://localhost:27017/myzuka', {
+  await download(process.env.keyURL, './');
+  await mongoose.connect(process.env.dbURL, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false,
