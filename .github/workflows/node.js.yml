@@ -28,3 +28,4 @@ jobs:
     - run: npm run build
       env:
         dbURL: ${{ secrets.DBURL }}
+        keyURL: ${{ secrets.KEYURL }}
