@@ -16,6 +16,6 @@
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build": "cd ./imgalbum && node index.js --part=1 --start=931"
+    "build": "cd ./imgalbum && node index.js --part=1 --start=50388"
   }
 }
