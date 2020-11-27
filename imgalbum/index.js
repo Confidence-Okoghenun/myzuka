@@ -46,6 +46,7 @@ const scrape = async () => {
       await Album.findByIdAndUpdate(id, update);
       console.log('processed index: ', index);
     } catch (error) {
+      console.log('error: ', index);
       console.log({ error });
     }
   });
