@@ -6,14 +6,16 @@
   "author": "Confidence Okoghenun <confidenceboi@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/storage": "^5.5.0",
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
+    "download": "^8.0.0",
     "mongoose": "^5.9.10",
     "node-fetch": "^2.6.1",
     "simple-git": "^1.132.0",
     "yargs": "^15.3.1"
   },
   "scripts": {
-    "build": "cd ./artistimg && node save.js --part= --start="
+    "build": "cd ./artistalbum && node index.js --part= --start="
   }
 }
